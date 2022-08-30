@@ -160,7 +160,7 @@ RSpec.describe "Items API" do
 
   describe 'PATCH /api/v1/items/:id endpoint' do
     context 'happy path' do
-      it 'creates a single item with the correct attributes' do
+      it 'updates a single item with the given item_params' do
         merchant_id = create(:merchant).id
 
         item_params = {
