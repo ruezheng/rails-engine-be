@@ -93,4 +93,41 @@ RSpec.describe "Items API" do
       end
     end
   end
+
+  describe 'POST /api/v1/items endpoint' do
+    context 'happy path' do
+      it 'creates a single item with the correct attributes' do
+        merchant_id = create(:merchant).id
+
+        item_params = {
+          name: 'Bad Coffee',
+          description: "The best dark roast you'll ever taste",
+          unit_price: 26.50,
+          merchant_id: merchant_id
+        }
+
+        headers = { 'CONTENT_TYPE' => 'application/json' }
+
+        post "/api/v1/items", headers: headers, params: JSON.generate(item: item_params)
+
+        expect(response.status).to eq(201)
+
+        new_item = Item.last
+
+        expect(new_item.id).to be_an(Integer)
+        expect(new_item.name).to eq('Bad Coffee')
+        expect(new_item.description).to eq("The best dark roast you'll ever taste")
+        expect(new_item.unit_price).to eq(26.5)
+        expect(new_item.merchant_id).to eq(merchant_id)
+      end
+    end
+
+    # context 'sad path' do
+    #   it "returns a 404 status if the id is not valid" do
+    #     get "/api/v1/merchants/1"
+    #
+    #     expect(response.status).to eq(404)
+    #   end
+    # end
+  end
 end
