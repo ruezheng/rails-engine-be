@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-Rspec.describe "Merchants API" do
+RSpec.describe "Merchants API" do
   describe 'index action' do
     context 'happy path' do
       it 'all merchants returned are the same in the db' do
@@ -9,7 +9,6 @@ Rspec.describe "Merchants API" do
         get '/api/v1/merchants'
         
         expect(response.status).to eq(200)      
-        expect(merchant).to have_key(:data) 
         
         merchants = JSON.parse(response.body, symbolize_names: true)
 
@@ -24,7 +23,7 @@ Rspec.describe "Merchants API" do
         end
       end
     end
-
+  end
   #   context 'sad path' do
   #     expect(response).to_not have_key(:number_sold) 
   #     expect(error).to eq(null)
