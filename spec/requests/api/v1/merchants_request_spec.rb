@@ -1,9 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe "Merchants API" do
+
   describe 'GET /api/v1/merchants endpoint' do
     context 'happy path' do
-      it 'sends all merchants and their attributes' do
+      it 'gets all merchants and their attributes' do
         create_list(:merchant, 3)
 
         get '/api/v1/merchants'
@@ -23,7 +24,7 @@ RSpec.describe "Merchants API" do
     end
 
     context 'sad path' do
-      it "sends an empty array if no merchants exist" do
+      it "gets an empty array if no merchants exist" do
         get '/api/v1/merchants'
 
         merchants = JSON.parse(response.body, symbolize_names: true)[:data]
@@ -36,7 +37,7 @@ RSpec.describe "Merchants API" do
 
   describe 'GET /api/v1/merchant/:id endpoint' do
     context 'happy path' do
-      it 'sends one merchant and their attributes by id' do
+      it 'gets one merchant and their attributes by id' do
         id = create(:merchant).id
 
         get "/api/v1/merchants/#{id}"
@@ -52,7 +53,7 @@ RSpec.describe "Merchants API" do
     end
 
     context 'sad path' do
-      it "sends a 404 status if the id is not valid" do
+      it "returns a 404 status if the id is not valid" do
         get "/api/v1/merchants/1"
 
         expect(response.status).to eq(404)
