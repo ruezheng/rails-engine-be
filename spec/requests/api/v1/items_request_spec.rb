@@ -78,5 +78,13 @@ RSpec.describe "Items API" do
         expect(item).to_not have_key(:number_sold)
       end
     end
+
+    context 'sad path' do
+      it "returns a 404 status if the id is not valid" do
+        get "/api/v1/merchants/1"
+
+        expect(response.status).to eq(404)
+      end
+    end
   end
 end
