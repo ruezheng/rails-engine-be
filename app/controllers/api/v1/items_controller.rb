@@ -17,7 +17,7 @@ class Api::V1::ItemsController < ApplicationController
     if item.save
       render json: ItemSerializer.new(item), status: 201
     else
-      renders status: 404
+      render status: 404
     end
   end
 

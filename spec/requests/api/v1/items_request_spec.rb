@@ -122,12 +122,22 @@ RSpec.describe "Items API" do
       end
     end
 
-    # context 'sad path' do
-    #   it "returns a 404 status if the id is not valid" do
-    #     get "/api/v1/merchants/1"
-    #
-    #     expect(response.status).to eq(404)
-    #   end
-    # end
+    context 'sad path' do
+      it "returns a 404 status if not all item_params are present" do
+        merchant_id = create(:merchant).id
+
+        item_params = {
+          name: 'Bad Coffee',
+          description: "The best dark roast you'll ever taste",
+          merchant_id: merchant_id
+        }
+
+        headers = { 'CONTENT_TYPE' => 'application/json' }
+
+        post "/api/v1/items", headers: headers, params: JSON.generate(item: item_params)
+
+        expect(response.status).to eq(404)
+      end
+    end
   end
 end
