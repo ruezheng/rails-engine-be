@@ -189,40 +189,29 @@ RSpec.describe "Items API" do
         expect(updated_item.merchant_id).to eq(merchant_id)
       end
     end
-    #
-    # context 'sad path' do
-    #   it "returns a 404 status if not all item_params are present" do
-    #     merchant_id = create(:merchant).id
-    #
-    #     item_params = {
-    #       name: 'Bad Coffee',
-    #       description: "The best dark roast you'll ever taste",
-    #       merchant_id: merchant_id
-    #     }
-    #
-    #     headers = { 'CONTENT_TYPE' => 'application/json' }
-    #
-    #     post "/api/v1/items", headers: headers, params: JSON.generate(item: item_params)
-    #
-    #     expect(response.status).to eq(404)
-    #   end
-    #
-    #   it "returns a 404 status if the item_params are not complete with valid data types" do
-    #     merchant_id = create(:merchant).id
-    #
-    #     item_params = {
-    #       name: 'Bad Coffee',
-    #       description: "The best dark roast you'll ever taste",
-    #       unit_price: "not available",
-    #       merchant_id: merchant_id
-    #     }
-    #
-    #     headers = { 'CONTENT_TYPE' => 'application/json' }
-    #
-    #     post "/api/v1/items", headers: headers, params: JSON.generate(item: item_params)
-    #
-    #     expect(response.status).to eq(404)
-    #   end
-    # end
+
+    describe 'DESTROY /api/v1/items/:id endpoint' do
+      context 'happy path' do
+        it 'deletes a single item record by id' do
+          merchant_id = create(:merchant).id
+          id = create(:item, merchant_id: merchant_id).id
+
+          delete "/api/v1/items/#{id}"
+
+          expect(response.status).to eq(204)
+        end
+      end
+
+      context 'sad path' do
+        it 'renders status 404 if item id is invalid' do
+          merchant_id = create(:merchant).id
+          id = create(:item, merchant_id: merchant_id).id + 1
+
+          delete "/api/v1/items/#{id}"
+
+          expect(response.status).to eq(404)
+        end
+      end
+    end
   end
 end
