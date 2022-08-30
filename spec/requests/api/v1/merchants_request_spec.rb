@@ -52,7 +52,7 @@ RSpec.describe "Merchants API" do
     end
 
     context 'sad path' do
-      it "sends a 404 status if the id not valid" do
+      it "sends a 404 status if the id is not valid" do
         get "/api/v1/merchants/1"
 
         expect(response.status).to eq(404)
