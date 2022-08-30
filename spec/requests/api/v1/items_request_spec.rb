@@ -157,4 +157,72 @@ RSpec.describe "Items API" do
       end
     end
   end
+
+  describe 'PATCH /api/v1/items/:id endpoint' do
+    context 'happy path' do
+      it 'creates a single item with the correct attributes' do
+        merchant_id = create(:merchant).id
+
+        item_params = {
+          name: 'Bad Coffee',
+          description: "The best dark roast you'll ever taste",
+          unit_price: 26.50,
+          merchant_id: merchant_id
+        }
+
+        item = Item.create!(item_params)
+
+        new_item_params = {
+          unit_price: 30.00
+        }
+
+        headers = { 'CONTENT_TYPE' => 'application/json' }
+
+        patch "/api/v1/items/#{item.id}", headers: headers, params: JSON.generate(item: new_item_params)
+
+        updated_item = Item.last
+
+        expect(updated_item.id).to be_an(Integer)
+        expect(updated_item.name).to eq('Bad Coffee')
+        expect(updated_item.description).to eq("The best dark roast you'll ever taste")
+        expect(updated_item.unit_price).to eq(30.00)
+        expect(updated_item.merchant_id).to eq(merchant_id)
+      end
+    end
+    #
+    # context 'sad path' do
+    #   it "returns a 404 status if not all item_params are present" do
+    #     merchant_id = create(:merchant).id
+    #
+    #     item_params = {
+    #       name: 'Bad Coffee',
+    #       description: "The best dark roast you'll ever taste",
+    #       merchant_id: merchant_id
+    #     }
+    #
+    #     headers = { 'CONTENT_TYPE' => 'application/json' }
+    #
+    #     post "/api/v1/items", headers: headers, params: JSON.generate(item: item_params)
+    #
+    #     expect(response.status).to eq(404)
+    #   end
+    #
+    #   it "returns a 404 status if the item_params are not complete with valid data types" do
+    #     merchant_id = create(:merchant).id
+    #
+    #     item_params = {
+    #       name: 'Bad Coffee',
+    #       description: "The best dark roast you'll ever taste",
+    #       unit_price: "not available",
+    #       merchant_id: merchant_id
+    #     }
+    #
+    #     headers = { 'CONTENT_TYPE' => 'application/json' }
+    #
+    #     post "/api/v1/items", headers: headers, params: JSON.generate(item: item_params)
+    #
+    #     expect(response.status).to eq(404)
+    #   end
+    # end
+  end
 end
