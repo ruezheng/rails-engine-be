@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe "Merchants API" do
   describe 'GET /api/v1/merchants endpoint' do
     context 'happy path' do
-      it 'gets all merchants and their attributes' do
+      it 'sends all merchants and their attributes' do
         create_list(:merchant, 3)
 
         get '/api/v1/merchants'
@@ -36,13 +36,13 @@ RSpec.describe "Merchants API" do
 
   describe 'GET /api/v1/merchant/:id endpoint' do
     context 'happy path' do
-      it 'gets one merchant and their attributes by id' do
+      it 'sends one merchant and their attributes by id' do
         id = create(:merchant).id
 
         get "/api/v1/merchants/#{id}"
 
         merchant = JSON.parse(response.body, symbolize_names: true)[:data]
-        
+
         expect(response.status).to eq(200)
         expect(merchant).to have_key(:id)
         expect(merchant[:attributes]).to have_key(:name)
