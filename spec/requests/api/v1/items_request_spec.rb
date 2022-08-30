@@ -35,5 +35,16 @@ RSpec.describe "Items API" do
         end
       end
     end
+
+    context 'sad path' do
+      it "returns an empty array if no items exist" do
+        get '/api/v1/items'
+
+        items = JSON.parse(response.body, symbolize_names: true)[:data]
+
+        expect(response.status).to eq(200)
+        expect(items).to eq([])
+      end
+    end
   end
 end

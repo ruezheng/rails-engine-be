@@ -27,7 +27,7 @@ RSpec.describe "Merchants API" do
     end
 
     context 'sad path' do
-      it "gets an empty array if no merchants exist" do
+      it "returns an empty array if no merchants exist" do
         get '/api/v1/merchants'
 
         merchants = JSON.parse(response.body, symbolize_names: true)[:data]
