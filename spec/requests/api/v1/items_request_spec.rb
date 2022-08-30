@@ -138,6 +138,23 @@ RSpec.describe "Items API" do
 
         expect(response.status).to eq(404)
       end
+
+      it "returns a 404 status if the item_params are not complete with valid data types" do
+        merchant_id = create(:merchant).id
+
+        item_params = {
+          name: 'Bad Coffee',
+          description: "The best dark roast you'll ever taste",
+          unit_price: "not available",
+          merchant_id: merchant_id
+        }
+
+        headers = { 'CONTENT_TYPE' => 'application/json' }
+
+        post "/api/v1/items", headers: headers, params: JSON.generate(item: item_params)
+
+        expect(response.status).to eq(404)
+      end
     end
   end
 end
