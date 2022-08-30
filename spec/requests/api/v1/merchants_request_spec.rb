@@ -13,21 +13,27 @@ RSpec.describe "Merchants API" do
         merchants = JSON.parse(response.body, symbolize_names: true)[:data]
 
         expect(merchants.count).to eq(3)
-        
+
         merchants.each do |merchant|
           expect(merchant).to have_key(:id)
-          expect(merchant[:attributes][:id]).to be_an(Integer)
           expect(merchant[:attributes]).to have_key(:name)
           expect(merchant[:attributes][:name]).to be_a(String)
+          expect(merchant).to_not have_key(:number_sold)
         end
       end
     end
 
-    # context 'sad path' do
-    #   expect(response).to_not have_key(:number_sold)
-    #   expect(error).to eq(null)
-    # end
+    context 'sad path' do
+      it "sends an empty array if no merchants exist" do
+        get '/api/v1/merchants'
 
+        expect(response.status).to eq(200)
+
+        merchants = JSON.parse(response.body, symbolize_names: true)[:data]
+
+        expect(merchants).to eq([])
+      end
+    end
   end
 
   # describe 'show action' do
