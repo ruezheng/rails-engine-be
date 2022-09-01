@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe 'Item Merchants API' do
   describe "Index: GET /api/v1/items/:items_id/merchants endpoint" do
     describe 'happy path' do
-      it 'gets all merchants that have a specific item' do
+      it 'Index: gets all merchants that have a specific item by item_id' do
         id = create(:item).id
         create_list(:merchant, 5, item_id: id)
 
