@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "Items API" do
 
-  describe 'GET /api/v1/items endpoint' do
+  describe 'Index: GET /api/v1/items endpoint' do
     context 'happy path' do
       it 'gets all items and their attributes' do
         id = create(:merchant).id
@@ -34,7 +34,8 @@ RSpec.describe "Items API" do
           expect(item[:attributes]).to have_key(:merchant_id)
           expect(item[:attributes][:merchant_id]).to be_a(Integer)
 
-          expect(item).to_not have_key(:number_sold)
+          expect(item).to_not have_key(:created_at)
+          expect(item).to_not have_key(:updated_at)
         end
       end
     end
@@ -51,7 +52,7 @@ RSpec.describe "Items API" do
     end
   end
 
-  describe 'GET /api/v1/items/:id endpoint' do
+  describe 'Show: GET /api/v1/items/:id endpoint' do
     context 'happy path' do
       it 'gets one item and its attributes by id' do
         merchant_id = create(:merchant).id
@@ -81,7 +82,8 @@ RSpec.describe "Items API" do
         expect(item[:attributes]).to have_key(:merchant_id)
         expect(item[:attributes][:merchant_id]).to be_a(Integer)
 
-        expect(item).to_not have_key(:number_sold)
+        expect(item).to_not have_key(:created_at)
+        expect(item).to_not have_key(:updated_at)
       end
     end
 
@@ -94,14 +96,14 @@ RSpec.describe "Items API" do
     end
   end
 
-  describe 'POST /api/v1/items endpoint' do
+  describe 'Create: POST /api/v1/items endpoint' do
     context 'happy path' do
       it 'creates a single item with the correct attributes' do
         merchant_id = create(:merchant).id
 
         item_params = {
           name: 'Bad Coffee',
-          description: "The best dark roast you'll ever taste",
+          description: "The best dark roast you'll ever have while camping!",
           unit_price: 26.50,
           merchant_id: merchant_id
         }
@@ -116,7 +118,7 @@ RSpec.describe "Items API" do
 
         expect(new_item.id).to be_an(Integer)
         expect(new_item.name).to eq('Bad Coffee')
-        expect(new_item.description).to eq("The best dark roast you'll ever taste")
+        expect(new_item.description).to eq("The best dark roast you'll ever have while camping!")
         expect(new_item.unit_price).to eq(26.5)
         expect(new_item.merchant_id).to eq(merchant_id)
       end
@@ -128,7 +130,7 @@ RSpec.describe "Items API" do
 
         item_params = {
           name: 'Bad Coffee',
-          description: "The best dark roast you'll ever taste",
+          description: "The best dark roast you'll ever have while camping!",
           merchant_id: merchant_id
         }
 
@@ -144,7 +146,7 @@ RSpec.describe "Items API" do
 
         item_params = {
           name: 'Bad Coffee',
-          description: "The best dark roast you'll ever taste",
+          description: "The best dark roast you'll ever have while camping!",
           unit_price: "not available",
           merchant_id: merchant_id
         }
@@ -158,14 +160,14 @@ RSpec.describe "Items API" do
     end
   end
 
-  describe 'PATCH /api/v1/items/:id endpoint' do
+  describe 'Update: PATCH /api/v1/items/:id endpoint' do
     context 'happy path' do
       it 'updates a single item with the given item_params' do
         merchant_id = create(:merchant).id
 
         item_params = {
           name: 'Bad Coffee',
-          description: "The best dark roast you'll ever taste",
+          description: "The best dark roast you'll ever have while camping!",
           unit_price: 26.50,
           merchant_id: merchant_id
         }
@@ -184,7 +186,7 @@ RSpec.describe "Items API" do
 
         expect(updated_item.id).to be_an(Integer)
         expect(updated_item.name).to eq('Bad Coffee')
-        expect(updated_item.description).to eq("The best dark roast you'll ever taste")
+        expect(updated_item.description).to eq("The best dark roast you'll ever have while camping!")
         expect(updated_item.unit_price).to eq(30.00)
         expect(updated_item.merchant_id).to eq(merchant_id)
       end
