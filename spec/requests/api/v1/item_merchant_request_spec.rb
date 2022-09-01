@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Item Merchants API' do
+RSpec.describe 'Item Merchant API' do
   describe "Index: GET /api/v1/items/:items_id/merchant endpoint" do
     describe 'happy path' do
       it 'gets a merchant associated with a specific item by item_id' do
@@ -28,10 +28,8 @@ RSpec.describe 'Item Merchants API' do
     end
 
     describe 'sad path' do
-      xit 'returns a 404 status if item id is invalid' do
-        id = create(:item).id + 1
-
-        get "/api/v1/items/#{id}/merchant"
+      it 'returns a 404 status if item id is invalid' do
+        get "/api/v1/items/1/merchant"
 
         expect(response.status).to eq(404)
       end
