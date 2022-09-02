@@ -1,14 +1,9 @@
-# README
-
 <h1>Rails Engine</h1>
 
 <p>
   An E-Commerce Application API
 </p>
-
 </div>
-
-
 
 <!-- TABLE OF CONTENTS -->
 <details>
