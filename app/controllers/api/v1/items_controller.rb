@@ -39,6 +39,15 @@ class Api::V1::ItemsController < ApplicationController
     end
   end
 
+  def find
+    item = Item.where("lower(name) like ?", "%#{params[:name].downcase}%").first
+    if item != nil
+      render json: ItemSerializer.new(item)
+    else
+      render json: { data: { error: 'No results found' } }, status: 204
+    end
+  end
+
   private
 
   def item_params

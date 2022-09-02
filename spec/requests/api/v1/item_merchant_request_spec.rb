@@ -4,8 +4,8 @@ RSpec.describe 'Item Merchant API' do
   describe "Index: GET /api/v1/items/:items_id/merchant endpoint" do
     describe 'happy path' do
       it 'gets a merchant associated with a specific item by item_id' do
-        merchant = create(:merchant)
-        item = create(:item, merchant_id: merchant.id)
+        id = create(:merchant).id
+        item = create(:item, merchant_id: id)
 
         get "/api/v1/items/#{item.id}/merchant"
 

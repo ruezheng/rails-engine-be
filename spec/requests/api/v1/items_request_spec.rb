@@ -218,29 +218,40 @@ RSpec.describe "Items API" do
   end
 
   describe 'GET /api/v1/items/find endpoint' do
-    context 'happy path' do
-      before do
-        merchant = create(:merchant)
-        item1 = create(:item, name: 'Bad Coffee', unit_price: 26.5, merchant_id: merchant.id)  
-        item2 = create(:item, merchant_id: merchant.id)
-        item3 = create(:item, merchant_id: merchant.id)
-        item4 = create(:item, merchant_id: merchant.id)
-        item5 = create(:item, merchant_id: merchant.id)
-      end
+    before do
+      merchant = create(:merchant)
+      item1 = create(:item, name: 'Bad Coffee', unit_price: 26.5, merchant_id: merchant.id)
+      item2 = create(:item, merchant_id: merchant.id)
+      item3 = create(:item, merchant_id: merchant.id)
+      item4 = create(:item, merchant_id: merchant.id)
+      item5 = create(:item, merchant_id: merchant.id)
+    end
 
+    context 'happy path' do
       it 'finds a single item which matches a search term' do
-        get "/api/v1/items/find?name=bad-coffee"
+        get "/api/v1/items/find?name=coffee"
 
         expect(response.status).to eq(200)
 
-        item = JSON.parse(response.body, symbolize_names: true)[:data]
-        
+        item = JSON.parse(response.body, symbolize_names: true)
+
         expect(item[:attributes]).to include(:name, :description, :unit_price, :merchant_id)
         expect(item[:attributes][:name]).to be_a(String)
         expect(item[:attributes][:description]).to be_a(String)
         expect(item[:attributes][:unit_price]).to be_a(Float)
         expect(item[:attributes][:merchant_id]).to be_an(Integer)
       end
-    end   
+    end
+
+    context 'sad path' do
+      it 'response is successful but returns an error message if a search term does not match an item' do
+        get "/api/v1/items/find?name=alibi"
+
+        items = JSON.parse(response.body, symbolize_names: true)[:data]
+
+        expect(items.status).to eq(204)
+        expect(items[:error]).to eq('No results found')
+      end
+    end
   end
 end
