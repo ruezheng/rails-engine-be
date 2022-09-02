@@ -191,28 +191,66 @@ RSpec.describe "Items API" do
         expect(updated_item.merchant_id).to eq(merchant_id)
       end
     end
+  end
 
-    describe 'DESTROY /api/v1/items/:id endpoint' do
-      context 'happy path' do
-        it 'deletes a single item record by id' do
-          merchant_id = create(:merchant).id
-          id = create(:item, merchant_id: merchant_id).id
+  describe 'DESTROY /api/v1/items/:id endpoint' do
+    context 'happy path' do
+      it 'deletes a single item record by id' do
+        merchant_id = create(:merchant).id
+        id = create(:item, merchant_id: merchant_id).id
 
-          delete "/api/v1/items/#{id}"
+        delete "/api/v1/items/#{id}"
 
-          expect(response.status).to eq(204)
-        end
+        expect(response.status).to eq(204)
       end
+    end
 
-      context 'sad path' do
-        it 'renders status 404 if item id is invalid' do
-          merchant_id = create(:merchant).id
-          id = create(:item, merchant_id: merchant_id).id + 1
+    context 'sad path' do
+      it 'renders status 404 if item id is invalid' do
+        merchant_id = create(:merchant).id
+        id = create(:item, merchant_id: merchant_id).id + 1
 
-          delete "/api/v1/items/#{id}"
+        delete "/api/v1/items/#{id}"
 
-          expect(response.status).to eq(404)
-        end
+        expect(response.status).to eq(404)
+      end
+    end
+  end
+
+  describe 'GET /api/v1/items/find endpoint' do
+    before do
+      merchant = create(:merchant)
+      item1 = create(:item, name: 'Bad Coffee', unit_price: 26.5, merchant_id: merchant.id)
+      item2 = create(:item, merchant_id: merchant.id)
+      item3 = create(:item, merchant_id: merchant.id)
+      item4 = create(:item, merchant_id: merchant.id)
+      item5 = create(:item, merchant_id: merchant.id)
+    end
+
+    context 'happy path' do
+      it 'finds a single item which matches a search term' do
+        get "/api/v1/items/find?name=coffee"
+
+        expect(response.status).to eq(200)
+
+        item = JSON.parse(response.body, symbolize_names: true)
+
+        expect(item[:attributes]).to include(:name, :description, :unit_price, :merchant_id)
+        expect(item[:attributes][:name]).to be_a(String)
+        expect(item[:attributes][:description]).to be_a(String)
+        expect(item[:attributes][:unit_price]).to be_a(Float)
+        expect(item[:attributes][:merchant_id]).to be_an(Integer)
+      end
+    end
+
+    context 'sad path' do
+      it 'response is successful but returns an error message if a search term does not match an item' do
+        get "/api/v1/items/find?name=alibi"
+
+        items = JSON.parse(response.body, symbolize_names: true)[:data]
+
+        expect(items.status).to eq(204)
+        expect(items[:error]).to eq('No results found')
       end
     end
   end
