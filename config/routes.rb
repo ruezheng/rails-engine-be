@@ -12,7 +12,6 @@ Rails.application.routes.draw do
       resources :items, only: [:index, :show, :create, :update, :destroy] do
         resources :merchant, only: [:index], to: 'item_merchant#index'
       end
-
     end
   end
 end

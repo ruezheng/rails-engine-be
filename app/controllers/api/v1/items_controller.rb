@@ -17,15 +17,14 @@ class Api::V1::ItemsController < ApplicationController
     if item.save
       render json: ItemSerializer.new(item), status: 201
     else
-      # item.errors.full_messages.to_sentence
-      render status: 404
+      render json: { error: item.errors.full_messages.to_sentence }, status: 404
     end
   end
 
   def update
     item = Item.update(params[:id], item_params)
     if item.save
-      render json: ItemSerializer.new(item), status: 204
+      render json: ItemSerializer.new(item), status: 200
     else
       render status: 404
     end
